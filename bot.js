@@ -3,9 +3,8 @@ const telegramBot = require('node-telegram-bot-api');
 const fs = require("fs");
 const editJsonFile = require("edit-json-file");
 const token = '852164574:AAFoFtXH7bvuUjaD5ZVRdh8SIspACxyr1PU';
-
-const first_message = ", что бы попасть в сообщество, ответь всего на 5 вопросов!"
-
+const question = require("./questions.json");
+// 813428708 admin
 var money_flow = {
         reply_markup: JSON.stringify({
                 inline_keyboard: [
@@ -33,6 +32,61 @@ var money_flow = {
         })
 };
 
+var workers_count = {
+        reply_markup: JSON.stringify({
+                inline_keyboard: [
+                        [{
+                                text: 'нет сотрудников',
+                                callback_data: '0'
+                        }],
+                        [{
+                                text: 'более 1 чел.',
+                                callback_data: '1_or_more'
+                        }],
+                        [{
+                                text: 'более 5 чел.',
+                                callback_data: '5_or_more'
+                        }],
+                        [{
+                                text: 'более 10 чел.',
+                                callback_data: '10_or_more'
+                        }],
+                        [{
+                                text: 'более 15 чел.',
+                                callback_data: '15_or_more'
+                        }]
+                ]
+        })
+};
+
+
+var trading_experience = {
+        reply_markup: JSON.stringify({
+                inline_keyboard: [
+                        [{
+                                text: 'от 3 месяцев',
+                                callback_data: '3_month'
+                        }],
+                        [{
+                                text: 'от 6 месяцев',
+                                callback_data: '6_month'
+                        }],
+                        [{
+                                text: 'от 1-го года',
+                                callback_data: '1_year'
+                        }],
+                        [{
+                                text: 'от 2-х лет',
+                                callback_data: '2_years'
+                        }],
+                        [{
+                                text: 'более 3-х лет',
+                                callback_data: 'more_than_3_years'
+                        }]
+                ]
+        })
+};
+
 var seller_account_question = {
         reply_markup: JSON.stringify({
                 inline_keyboard: [
@@ -55,14 +109,13 @@ let amazon_user = {
         second_query: "experience",
         third_query: "strategy",
         forth_query: "money_flow",
-        fifth_query: "peoples_count"
+        fifth_query: "peoples_count",
+        black_list : false
 };
 
 const bot = new telegramBot(token, {
         polling: true
 });
-
-
 
 
 bot.on('message', (msg) => {
@@ -79,37 +132,106 @@ bot.on('message', (msg) => {
                 }
 
 
-                bot.sendMessage(chatId, msg.chat.first_name + first_message);
+                bot.sendMessage(chatId, msg.chat.first_name + question.hello_message);
                 setTimeout(() => {
-                        bot.sendMessage(chatId, "Ты владелец Seller аккаунта?", seller_account_question)
+                        bot.sendMessage(chatId, question.first_question, seller_account_question)
                 }, 1000);
                 fs.closeSync()
         } else {
-                fs.readFile(chat_json, (err, data) => {
-                        console.log(JSON.parse(data))
-                })
-                fs.closeSync()
-                bot.sendMessage(chatId, msg.text, money_flow);
+                let file = editJsonFile(chat_json);
+                file.set("third_query", msg.text);
+                bot.sendMessage(chatId, question.fourth_question, money_flow);
+                file.save()
         }
-        bot.sendMessage(chatId, msg.text);
 });
 
 bot.on("polling_error", (msg) => console.log(""));
 
 bot.on('callback_query', function (msg) {
+        let chatId = msg.message.chat.id;
         let chat_json = msg.message.chat.id + ".json";
         let file = editJsonFile(chat_json);
-
-        switch (msg.data) {
-                case "seller_account_yes" :
-                        file.set("first_query", "yes");
-                        break;
-                case "seller_account_no" :
-                        file.set("first_query", "no");
-                        break;
-                default:
-                        break;
+        let is_banned = file.data.black_list; 
+        
+        if (!is_banned) {
+                switch (msg.data) {
+                        case "seller_account_yes" :
+                                file.set("first_query", "yes");
+                                bot.sendMessage(chatId, question.second_question, trading_experience);
+                                break;
+                                
+                        case "seller_account_no" :
+                                file.set("first_query", "no");
+                                file.set("black_list", true)
+                                bot.sendMessage(chatId, question.black_list_message);
+                                break;
+                        case "3_month" :
+                                file.set("second_query", msg.data);
+                                bot.sendMessage(chatId, question.third_question);
+                                break;
+                        case "6_month" :
+                                file.set("second_query", msg.data);
+                                bot.sendMessage(chatId, question.third_question);
+                                break;
+                        case "1_year" :
+                                file.set("second_query", msg.data);
+                                bot.sendMessage(chatId, question.third_question);
+                                break;
+                        case "2_years" :
+                                file.set("second_query", msg.data);
+                                bot.sendMessage(chatId, question.third_question);
+                                break;
+                        case "more_than_3_years" :
+                                file.set("second_query", msg.data);
+                                bot.sendMessage(chatId, question.third_question);
+                                break;
+                        case "3000" :
+                                file.set("forth_query", msg.data);
+                                bot.sendMessage(chatId, question.fifth_question, workers_count);
+                                break;
+                        case "5000" :
+                                file.set("forth_query", msg.data);
+                                bot.sendMessage(chatId, question.fifth_question, workers_count);
+                                break;
+                        case "10000" :
+                                file.set("forth_query", msg.data);
+                                bot.sendMessage(chatId, question.fifth_question, workers_count);
+                                break;
+                        case "20000" :
+                                file.set("forth_query", msg.data);
+                                bot.sendMessage(chatId, question.fifth_question, workers_count);
+                                break;
+                        case "50000" :
+                                file.set("forth_query", msg.data);
+                                bot.sendMessage(chatId, question.fifth_question, workers_count);
+                                break;
+                        case "0" :
+                                file.set("fifth_query", msg.data);
+                                bot.sendMessage(chatId, question.thanks_message);
+                                break;
+                        case "1_or_more" :
+                                file.set("fifth_query", msg.data);
+                                bot.sendMessage(chatId, question.thanks_message);
+                                break;
+                        case "5_or_more" :
+                                file.set("fifth_query", msg.data);
+                                bot.sendMessage(chatId, question.thanks_message);
+                                break;
+                        case "10_or_more" :
+                                file.set("fifth_query", msg.data);
+                                bot.sendMessage(chatId, question.thanks_message);
+                                break;
+                        case "15_or_more" :
+                                file.set("fifth_query", msg.data);
+                                bot.sendMessage(chatId, question.thanks_message);
+                                break;
+                        default:
+                                bot.sendMessage(chatId, "Выбери один из предложеных вариантов");
+                                break;
+                }
+        } else {
+                bot.sendMessage(chatId, "тебя забанили, иди нахуй");
         }
-        console.log("chat id : " + msg.message.chat.id)
-        console.log(msg.data)
+        file.save();
+        console.log(msg.data);
 });
