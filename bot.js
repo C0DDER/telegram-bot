@@ -1,10 +1,19 @@
-process.env["NTBA_FIX_319"] = 1;
-const telegramBot = require('node-telegram-bot-api');
-const fs = require("fs");
-const editJsonFile = require("edit-json-file");
-const token = '852164574:AAFoFtXH7bvuUjaD5ZVRdh8SIspACxyr1PU';
-const question = require("./questions.json");
+const telegramBot       = require('node-telegram-bot-api');
+const fs                = require("fs");
+const mysql             = require('mysql');
+const question          = require("./questions.json");
+// const editJsonFile      = require("edit-json-file");
+
+const token             = '852164574:AAFoFtXH7bvuUjaD5ZVRdh8SIspACxyr1PU';
 // 813428708 admin
+
+var connection = mysql.createConnection({
+        host     : 'boncreab.mysql.tools',
+        user     : 'boncreab_db',
+        password : 'qBSjCDRD',
+        database : 'boncreab_db'
+});
+
 var money_flow = {
         reply_markup: JSON.stringify({
                 inline_keyboard: [
@@ -31,6 +40,7 @@ var money_flow = {
                 ]
         })
 };
+console.log("bot is running");
 
 var workers_count = {
         reply_markup: JSON.stringify({
@@ -102,16 +112,16 @@ var seller_account_question = {
         })
 };
 
-let amazon_user = {
-        chatId: "chat_id",
-        name: 'name',
-        first_query: "seller_account",
-        second_query: "experience",
-        third_query: "strategy",
-        forth_query: "money_flow",
-        fifth_query: "peoples_count",
-        black_list : false
-};
+// let amazon_user = {
+//         chatId: "chat_id",
+//         name: 'name',
+//         first_query: "seller_account",
+//         second_query: "experience",
+//         third_query: "strategy",
+//         forth_query: "money_flow",
+//         fifth_query: "peoples_count",
+//         black_list : false
+// };
 
 const bot = new telegramBot(token, {
         polling: true
@@ -119,37 +129,38 @@ const bot = new telegramBot(token, {
 
 
 bot.on('message', (msg) => {
+        connection.connect();
         const chatId = msg.chat.id;
-        const chat_json = chatId + ".json";
-        amazon_user.name = msg.chat.first_name;
-        amazon_user.chatId = chatId;
+        const chat_json = "user_data/" + chatId + ".json";
+        amazon_user_name = msg.chat.first_name;
+        amazon_user_chatId = chatId;
         if (msg.text == "/start") {
-                if (!fs.existsSync(chat_json)) {
-                        let data = JSON.stringify(amazon_user)
-                        fs.writeFile(chat_json, data, function (err) {
-                                console.log('Saved!');
-                        });
-                }
-
+                let sql_query = 'INSERT INTO `telegram_bot`(`id`, `name`, `chat_Id`, `first_q`, `second_q`, `third_q`, `fourth_q`, `fifth_q`, `is_banned`) VALUES ("","' + amazon_user_name + '","' + amazon_user_chatId + '","null","null","null","null","null","null")'
+                connection.query(sql_query, function (error, results, fields) {
+                        console.log('The solution is: ', results);
+                });
 
                 bot.sendMessage(chatId, msg.chat.first_name + question.hello_message);
                 setTimeout(() => {
                         bot.sendMessage(chatId, question.first_question, seller_account_question)
                 }, 1000);
-                fs.closeSync()
         } else {
-                let file = editJsonFile(chat_json);
-                file.set("third_query", msg.text);
                 bot.sendMessage(chatId, question.fourth_question, money_flow);
-                file.save()
         }
+        
+        log = "\nchatId : " + chatId + " | user_name : " + msg.chat.first_name + " | message : " + msg.text + " | date : " + Date.now();
+        fs.appendFile("log.txt", log, function (err) {
+                console.log('Saved!');
+        });
+        connection.end();
+        fs.closeSync()
 });
 
 bot.on("polling_error", (msg) => console.log(""));
 
 bot.on('callback_query', function (msg) {
         let chatId = msg.message.chat.id;
-        let chat_json = msg.message.chat.id + ".json";
+        let chat_json = "user_data/" + msg.message.chat.id + ".json";
         let file = editJsonFile(chat_json);
         let is_banned = file.data.black_list; 
         
