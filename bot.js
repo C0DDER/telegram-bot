@@ -1,18 +1,18 @@
 const telegramBot       = require('node-telegram-bot-api');
 const fs                = require("fs");
-const mysql             = require('mysql');
+// const mysql             = require('mysql');
 const question          = require("./questions.json");
 // const editJsonFile      = require("edit-json-file");
 
 const token             = '852164574:AAFoFtXH7bvuUjaD5ZVRdh8SIspACxyr1PU';
 // 813428708 admin
 
-var connection = mysql.createConnection({
-        host     : 'boncreab.mysql.tools',
-        user     : 'boncreab_db',
-        password : 'qBSjCDRD',
-        database : 'boncreab_db'
-});
+// var connection = mysql.createConnection({
+//         host     : 'boncreab.mysql.tools',
+//         user     : 'boncreab_db',
+//         password : 'qBSjCDRD',
+//         database : 'boncreab_db'
+// });
 
 var money_flow = {
         reply_markup: JSON.stringify({
@@ -131,13 +131,14 @@ const bot = new telegramBot(token, {
 bot.on('message', (msg) => {
         connection.connect();
         const chatId = msg.chat.id;
-        const chat_json = "user_data/" + chatId + ".json";
+        // const chat_json = "user_data/" + chatId + ".json";
         amazon_user_name = msg.chat.first_name;
         amazon_user_chatId = chatId;
+        console.log(msg.text);
         if (msg.text == "/start") {
-                let sql_query = 'INSERT INTO `telegram_bot`(`id`, `name`, `chat_Id`, `first_q`, `second_q`, `third_q`, `fourth_q`, `fifth_q`, `is_banned`) VALUES ("","' + amazon_user_name + '","' + amazon_user_chatId + '","null","null","null","null","null","null")'
+                var sql_query = 'INSERT INTO `telegram_bot`(`id`, `name`, `chat_Id`, `first_q`, `second_q`, `third_q`, `fourth_q`, `fifth_q`, `is_banned`) VALUES ("","' + amazon_user_name + '","' + amazon_user_chatId + '","null","null","null","null","null","null")'
                 connection.query(sql_query, function (error, results, fields) {
-                        console.log('The solution is: ', results);
+                        if (error) throw error;
                 });
 
                 bot.sendMessage(chatId, msg.chat.first_name + question.hello_message);
@@ -145,15 +146,19 @@ bot.on('message', (msg) => {
                         bot.sendMessage(chatId, question.first_question, seller_account_question)
                 }, 1000);
         } else {
+                var sql_query = 'INSERT INTO `telegram_bot`(`id`, `name`, `chat_Id`, `first_q`, `second_q`, `third_q`, `fourth_q`, `fifth_q`, `is_banned`) VALUES ("","' + amazon_user_name + '","' + amazon_user_chatId + '","null","null","null","null","null","null")'
+                connection.query(sql_query, function (error, results, fields) {
+                        if (error) throw error;
+                });
                 bot.sendMessage(chatId, question.fourth_question, money_flow);
         }
         
-        log = "\nchatId : " + chatId + " | user_name : " + msg.chat.first_name + " | message : " + msg.text + " | date : " + Date.now();
-        fs.appendFile("log.txt", log, function (err) {
-                console.log('Saved!');
-        });
-        connection.end();
-        fs.closeSync()
+        // log = "\nchatId : " + chatId + " | user_name : " + msg.chat.first_name + " | message : " + msg.text + " | date : " + Date.now();
+        // fs.appendFile("log.txt", log, function (err) {
+        //         console.log('Saved!');
+        // });
+        // connection.end();
+        // fs.closeSync()
 });
 
 bot.on("polling_error", (msg) => console.log(""));
