@@ -1,6 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 const mysql = require('mysql');
-const token = '852164574:AAFoFtXH7bvuUjaD5ZVRdh8SIspACxyr1PU';
+const token = '891088156:AAHBfA6Lig56LHT_Doof0S3VHfF9fZwgHdY';
 
 const bot = new TelegramBot(token, {
         polling: true
@@ -14,7 +14,8 @@ var connection = mysql.createConnection({
 });
 
 bot.on("new_chat_members", function (msg) {
-        var white_list = 'SELECT COUNT(*) FROM `telegram_bot` WHERE `user_name` =  "' + msg.new_chat_member + '" AND `is_banned` = "acess_true""';
+        var username = msg.new_chat_members[0]["username"];
+        var white_list = 'SELECT COUNT(*) FROM `telegram_bot` WHERE `user_name` =  "' + username + '" AND `is_banned` = "acess_true"';
         console.log(white_list);
         
         connection.query(white_list, function (error, results, fields) {
