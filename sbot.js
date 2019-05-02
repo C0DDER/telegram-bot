@@ -110,8 +110,8 @@ const bot = new TelegramBot(token, {
         polling: true
 });
 
-var chat_fn = function (chatId, name, message) {
-        if (message == "/start") {
+var chat_fn = function (chatId, name, msg) {
+        if (msg.text == "/start") {
                 let count_query = "SELECT COUNT(*) FROM `telegram_bot` WHERE `chat_Id` = \"" + chatId + "\"";
 
                 connection.query(count_query, function (error, results, fields) {
@@ -128,7 +128,7 @@ var chat_fn = function (chatId, name, message) {
                         bot.sendMessage(chatId, question.first_question, seller_account_question)
                 }, 1000);
         } else {
-                var sql_query = 'UPDATE `telegram_bot` SET `third_q`= "' + message + '" WHERE `chat_Id` = "' + chatId + '"'
+                var sql_query = 'UPDATE `telegram_bot` SET `third_q`= "' + msg.text + '" WHERE `chat_Id` = "' + chatId + '"'
                 connection.query(sql_query, function (error, results, fields) {
                         if (error) throw error;
                 });
@@ -139,7 +139,7 @@ var chat_fn = function (chatId, name, message) {
 bot.on('message', (msg) => {
         let chatId = msg.chat.id;
         let name = msg.chat.first_name;
-        let message = msg.text;
+        let message = msg;
 
         var white_list = 'SELECT COUNT(*) FROM `telegram_bot` WHERE `user_name` =  "' + msg.chat.username + '" AND `is_banned` = "ban"';
         console.log(white_list);
@@ -167,7 +167,6 @@ bot.on("polling_error", function (error) {
 
 bot.on('callback_query', function (msg) {
         let chatId = msg.message.chat.id;
-        console.log("here");
         var is_banned_query = 'SELECT * FROM `telegram_bot` WHERE `chat_Id` = "' + chatId + '"';
         connection.query(is_banned_query, function (error, results, fields) {
                 var name = results[0]['name'];
@@ -187,7 +186,7 @@ bot.on('callback_query', function (msg) {
                                         break;
 
                                 case "seller_account_no":
-                                        var query = 'UPDATE `telegram_bot` SET `first_q`= "no", `is_banned` = "yes" WHERE `chat_Id` = "' + chatId + '"';
+                                        var query = 'UPDATE `telegram_bot` SET `first_q`= "no", `is_banned` = "ban" WHERE `chat_Id` = "' + chatId + '"';
                                         bot.sendMessage(chatId, question.black_list_message);
                                         break;
                                 case "3_month":
