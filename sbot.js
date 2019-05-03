@@ -256,6 +256,7 @@ bot.on('callback_query', function (msg) {
                                 case "15_or_more":
                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "15" WHERE `chat_Id` = "' + chatId + '"';
                                         bot.sendMessage(admin_chat, message);
+                                        bot.sendMessage(813428708, message);
                                         bot.sendMessage(chatId, question.thanks_message);
                                         break;
                                 default:
