@@ -231,18 +231,26 @@ bot.on('callback_query', function (msg) {
                                         break;
                                 case "0":
                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "0" WHERE `chat_Id` = "' + chatId + '"';
+                                        bot.sendMessage(admin_chat, message);
+                                        bot.sendMessage(813428708, message);
                                         bot.sendMessage(chatId, question.thanks_message);
                                         break;
                                 case "1_or_more":
                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "1" WHERE `chat_Id` = "' + chatId + '"';
+                                        bot.sendMessage(admin_chat, message);
+                                        bot.sendMessage(813428708, message);
                                         bot.sendMessage(chatId, question.thanks_message);
                                         break;
                                 case "5_or_more":
                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "5" WHERE `chat_Id` = "' + chatId + '"';
+                                        bot.sendMessage(admin_chat, message);
+                                        bot.sendMessage(813428708, message);
                                         bot.sendMessage(chatId, question.thanks_message);
                                         break;
                                 case "10_or_more":
                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "10" WHERE `chat_Id` = "' + chatId + '"';
+                                        bot.sendMessage(admin_chat, message);
+                                        bot.sendMessage(813428708, message);
                                         bot.sendMessage(chatId, question.thanks_message);
                                         break;
                                 case "15_or_more":
