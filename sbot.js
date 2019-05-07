@@ -268,31 +268,31 @@ bot.on('callback_query', function (msg) {
                                                 case "0":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "0" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
-                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "1_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "1" WHERE `chat_Id` = "' + chatId + '"';
-                                                        bot.sendMessage(admin_chat, message);
-                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "5_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "5" WHERE `chat_Id` = "' + chatId + '"';
-                                                        bot.sendMessage(admin_chat, message);
-                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "10_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "10" WHERE `chat_Id` = "' + chatId + '"';
-                                                        bot.sendMessage(admin_chat, message);
-                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "15_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "15" WHERE `chat_Id` = "' + chatId + '"';
-                                                        bot.sendMessage(admin_chat, message);
-                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
+                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 default:
