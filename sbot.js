@@ -200,19 +200,19 @@ bot.on('callback_query', function (msg) {
 
                         switch (msg_text) {
                                 case "ban_user":
-                                        if (id_chat == 437217260 || id_chat == 813428708 || id_chat == 211086118) { 
+                                        if (id_chat == 437217260 || id_chat == 813428708 || id_chat == 211086118) {
                                                 var query = "SELECT COUNT(*) FROM `telegram_bot`";
-                                                bot.sendMessage(chatId, "это админы"); 
+                                                bot.sendMessage(chatId, "это админы");
                                         } else {
-                                                var query = 'UPDATE `telegram_bot` SET `is_banned` = "ban" WHERE `chat_Id` = "' + id_chat + '"';  
+                                                var query = 'UPDATE `telegram_bot` SET `is_banned` = "ban" WHERE `chat_Id` = "' + id_chat + '"';
                                                 bot.sendMessage(chatId, "Пользователь заблокирован");
-                                        }   
-                                        console.log(query) 
+                                        }
+                                        console.log(query)
                                         break;
                                 case "accept_user":
                                         var query = 'UPDATE `telegram_bot` SET `is_banned` = "acess_true" WHERE `chat_Id` = "' + id_chat + '"';
-                                        bot.sendMessage(chatId, "Пользователь получил приглашение");  
-                                        bot.sendMessage(id_chat, "test link")  
+                                        bot.sendMessage(chatId, "Пользователь получил приглашение");
+                                        bot.sendMessage(id_chat, "test link")
                                         break;
                                 default:
                                         switch (msg.data) {
@@ -220,7 +220,7 @@ bot.on('callback_query', function (msg) {
                                                         var query = 'UPDATE `telegram_bot` SET `first_q`= "yes" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(chatId, question.second_question, trading_experience);
                                                         break;
-                
+
                                                 case "seller_account_no":
                                                         var query = 'UPDATE `telegram_bot` SET `first_q`= "no", `is_banned` = "ban" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(chatId, question.black_list_message);
@@ -268,31 +268,31 @@ bot.on('callback_query', function (msg) {
                                                 case "0":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "0" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
-                                                        ////
+                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "1_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "1" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message);
-                                                        ////
+                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "5_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "5" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message);
-                                                        ////
+                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "10_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "10" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message);
-                                                        ////
+                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "15_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "15" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message);
-                                                        ////
+                                                        bot.sendMessage(194062342, message, accept_user(results[0]['chat_Id']));
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 default:
@@ -301,7 +301,7 @@ bot.on('callback_query', function (msg) {
                                         }
                                         break;
                         }
-                        
+
                         connection.query(query, function (error, results, fields) {
                                 if (error) throw error;
                         });
