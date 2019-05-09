@@ -1,9 +1,9 @@
 const TelegramBot = require('node-telegram-bot-api');
 const question = require("./questions.json");
 const mysql = require('mysql');
-const token = '852164574:AAFoFtXH7bvuUjaD5ZVRdh8SIspACxyr1PU';
+const token = '810664831:AAH6NNpehZdwsrTvVOKgLgaJTabfY2Jq3FE';
 
-var admin_chat = 211086118;
+var admin_chat = 813428708;
 
 var seller_account_question = {
         reply_markup: JSON.stringify({
@@ -268,31 +268,31 @@ bot.on('callback_query', function (msg) {
                                                 case "0":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "0" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
-                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
+                                                        
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "1_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "1" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
-                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
+                                                        
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "5_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "5" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
-                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
+                                                        
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "10_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "10" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
-                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
+                                                        
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 case "15_or_more":
                                                         var query = 'UPDATE `telegram_bot` SET `fifth_q`= "15" WHERE `chat_Id` = "' + chatId + '"';
                                                         bot.sendMessage(admin_chat, message, accept_user(results[0]['chat_Id']));
-                                                        bot.sendMessage(437217260, message, accept_user(results[0]['chat_Id']));
+                                                        
                                                         bot.sendMessage(chatId, question.thanks_message);
                                                         break;
                                                 default:
